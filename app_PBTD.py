@@ -88,11 +88,13 @@ if st.button("Start Prediction"):
             img = img / 255.0
             img = np.expand_dims(img, axis=0)
 
+
             with st.spinner('Analyzing...'):
                 try:
                     preds = model.predict(img)
-                except Exception:
-                    preds = model.predict(img)
+                except Exception as e:
+                    st.error(f"Prediction error: {e}")
+                    continue  # pasa a la siguiente imagen o termina el ciclo
 
 
             predicted_class = class_names[np.argmax(preds)]
