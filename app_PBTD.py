@@ -20,7 +20,7 @@ def download_model_gdown(google_drive_id, destination):
     gdown.download(url, destination, quiet=True)
     st.success("Modelo descargado correctamente.")  # Comentado para no mostrar
 
-model_path = "best_model.keras"
+model_path = "best.keras"
 google_drive_id = "1T5jDAGnBaZzvmLquuZ78zs9uvg4Yl2b7"
 
 if not os.path.exists(model_path):
