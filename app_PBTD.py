@@ -92,7 +92,8 @@ if st.button("Start Prediction"):
                 try:
                     preds = model.predict(img)
                 except Exception:
-                    preds = model.predict([img, img])
+                    preds = model.predict(img)
+
 
             predicted_class = class_names[np.argmax(preds)]
             confidence = np.max(preds) * 100
