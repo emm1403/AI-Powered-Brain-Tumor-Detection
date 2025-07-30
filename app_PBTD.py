@@ -71,49 +71,50 @@ clinical_features = {
 uploaded_files = st.file_uploader("Upload MRI image(s) (only after filling clinical data)", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
 if st.button("Start Prediction"):
-    if model is None:
-        st.error("Model is not loaded. Cannot perform prediction.")
-    elif not uploaded_files:
+    if not uploaded_files:
         st.warning("Please upload at least one MRI image to start prediction.")
     else:
         for uploaded_file in uploaded_files:
             st.markdown("---")
             st.subheader(f"Image: {uploaded_file.name}")
 
-            try:
-                image = Image.open(uploaded_file).convert('RGB')
-                st.image(image, caption='Uploaded Image', use_column_width=True)
+            image = Image.open(uploaded_file).convert('RGB')
+            st.image(image, caption='Uploaded Image', use_column_width=True)
 
-                img = np.array(image)
-                img = cv2.resize(img, (224, 224))
-                img = img / 255.0
-                img = np.expand_dims(img, axis=0)
+            img = np.array(image)
+            img = cv2.resize(img, (224, 224))
+            img = img / 255.0
+            img = np.expand_dims(img, axis=0)
 
-                with st.spinner('Analyzing...'):
+            with st.spinner('Analyzing...'):
+                try:
                     preds = model.predict(img)
-                    predicted_class = class_names[np.argmax(preds)]
-                    confidence = np.max(preds) * 100
+                except Exception:
+                    preds = model.predict([img, img])
 
-                    st.success(f"Predicted Tumor Type: {predicted_class}")
-                    st.info(f"Confidence: {confidence:.2f}%")
+                predicted_class = class_names[np.argmax(preds)]
+                confidence = np.max(preds) * 100
 
-                    if confidence < 90:
-                        st.warning("Low confidence. Please try uploading a higher quality image to reduce diagnostic errors.")
+                st.success(f"Predicted Tumor Type: {predicted_class}")
+                st.info(f"Confidence: {confidence:.2f}%")
 
-                    st.markdown("### Prediction Probabilities:")
-                    for i, prob in enumerate(preds[0]):
-                        st.write(f"- {class_names[i]}: {prob * 100:.2f}%")
+                if confidence < 90:
+                    st.warning("Low confidence. Please try uploading a higher quality image to reduce diagnostic errors.")
 
-                    rec = recommendations_dict.get(predicted_class, "No recommendations available.")
-                    st.markdown(f"### Clinical Recommendations\n{rec}")
+                st.markdown("### Prediction Probabilities:")
+                for i, prob in enumerate(preds[0]):
+                    st.write(f"- {class_names[i]}: {prob * 100:.2f}%")
 
-                    st.markdown("### Patient & Professional Info")
-                    st.write(f"- Professional: {professional_name if professional_name else 'N/A'}")
-                    st.write(f"- Patient: {patient_name if patient_name else 'N/A'}")
+                rec = recommendations_dict.get(predicted_class, "No recommendations available.")
+                st.markdown(f"### Clinical Recommendations\n{rec}")
 
-                    st.markdown("### Clinical Data Provided")
-                    for key, value in clinical_features.items():
-                        st.write(f"- **{key}:** {value}")
+                st.markdown("### Patient & Professional Info")
+                st.write(f"- Professional: {professional_name if professional_name else 'N/A'}")
+                st.write(f"- Patient: {patient_name if patient_name else 'N/A'}")
+
+                st.markdown("### Clinical Data Provided")
+                for key, value in clinical_features.items():
+                    st.write(f"- **{key}:** {value}")
 
                     # PDF generation
                     def generate_pdf(image_name, prediction, confidence, professional, patient, clinical_data, recommendations):
