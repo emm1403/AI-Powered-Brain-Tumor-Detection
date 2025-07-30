@@ -42,7 +42,7 @@ else:
     st.error(f"No se encontró el archivo del modelo en: {model_path}")
 
 
-class_names = ["Astrocytoma", "Glioma", "Meningioma", "Neurocytoma", "Pituitary Tumor", "Schwannoma", "NoTumor"]
+class_names = ["Astrocytoma", "Glioma", "Meningioma", "Neurocytoma", "Pituitary Tumor", "Schwannoma", "No Tumor"]
 
 recommendations_dict = {
     "Astrocytoma": (
