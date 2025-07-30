@@ -17,7 +17,7 @@ st.markdown("Please fill in the clinical data first. Then upload MRI image(s) an
 
 # Descargar y cargar modelo
 model_path = "best.keras"
-google_drive_id = "1cj7N3z8_pHHQiNtWnao1k-b_kEy1ILDk"
+google_drive_id = "1NJ9Dbftkc08Ul5uz29fg7coruRIjezHe"
 
 def download_model_gdown(google_drive_id, destination):
     url = f"https://drive.google.com/uc?id={google_drive_id}"
