@@ -1,0 +1,8 @@
+tensorflow-cpu
+opencv-python-headless
+numpy
+Pillow
+reportlab
+streamlit
+requests
+gdown
