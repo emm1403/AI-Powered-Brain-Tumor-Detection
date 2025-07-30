@@ -32,15 +32,16 @@ if not os.path.exists(model_path):
 # st.write("¿El archivo existe?", os.path.exists(model_path))  # Comentado para no mostrar
 
 if os.path.exists(model_path):
-    st.success(f"Modelo encontrado.")  # Comentado para no mostrar
+    st.success(f"Modelo encontrado.")
     try:
         model = tf.keras.models.load_model(model_path)
-#st.success("Modelo cargado correctamente.")  # Comentado para no mostrar
+        st.success("Modelo cargado correctamente.")
     except Exception as e:
         st.error(f"Error al cargar el modelo: {e}")
+        model = None  # Para evitar error de variable no definida
 else:
     st.error(f"No se encontró el archivo del modelo en: {model_path}")
-
+    model = None
 
 class_names = ["Astrocytoma", "Glioma", "Meningioma", "Neurocytoma", "Pituitary Tumor", "Schwannoma", "No Tumor"]
 
