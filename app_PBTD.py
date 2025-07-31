@@ -201,4 +201,3 @@ if st.button("Start Prediction"):
                     file_name=pdf_filename,
                     mime="application/pdf"
                 )
-            )
